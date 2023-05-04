@@ -13,6 +13,11 @@ def performance_metrics(name, run, numberofclass, outputMatrix, Test_Yd_calculat
     print("Performance criteria - {0}"''.format(name))
     print(" ")
 
+    if numberofclass==2:
+        class_status="binary"
+    else:
+        class_status="macro"
+
     if run == 1:
         # The number of rows of y_test and y_pred must be equal to the number of samples, the number of columns must be equal to the number of columns of the outputset
         outputMatrix = np.array(outputMatrix).reshape(len(outputMatrix), len(outputMatrix[0]))
@@ -29,14 +34,16 @@ def performance_metrics(name, run, numberofclass, outputMatrix, Test_Yd_calculat
 
         # Confusion Matrix - verify accuracy of each class
         cm = confusion_matrix(outputMatrix, Test_Yd_calculated_Class)
+        sns.set(font_scale=1.4)  # Adjust to fit
         sns.heatmap(cm,annot=True,fmt=".0f",linewidths=.5)
-        plt.xlabel('Predicted')
-        plt.ylabel('Actual')
+        label_font = {'size': '14'}  # Adjust to fit
+        plt.xlabel('Predicted', fontdict=label_font)
+        plt.ylabel('Actual', fontdict=label_font)
         plt.title('Confusion Matrix for {0}'''.format(name))
         accuracy = round(accuracy_score(outputMatrix, Test_Yd_calculated_Class), 3)
-        recall = round(recall_score(outputMatrix, Test_Yd_calculated_Class, average="macro"), 3)
-        precision = round(precision_score(outputMatrix, Test_Yd_calculated_Class, average="macro"), 3)
-        fmeasure = round(f1_score(outputMatrix, Test_Yd_calculated_Class, average="macro"), 3)
+        recall = round(recall_score(outputMatrix, Test_Yd_calculated_Class, average=class_status), 3)
+        precision = round(precision_score(outputMatrix, Test_Yd_calculated_Class, average=class_status), 3)
+        fmeasure = round(f1_score(outputMatrix, Test_Yd_calculated_Class, average=class_status), 3)
         labels = list(range(0, numberofclass))
         outputMatrix_b = label_binarize(outputMatrix, classes=labels)
         Test_Yd_calculated_Class_b = label_binarize(Test_Yd_calculated_Class, classes=labels)
@@ -126,9 +133,9 @@ def performance_metrics(name, run, numberofclass, outputMatrix, Test_Yd_calculat
             cm = confusion_matrix(outputMatrix, Test_Yd_calculated_Class[j])
             cm_list.append(cm)
             accuracy = round(accuracy_score(outputMatrix, Test_Yd_calculated_Class[j]), 3)
-            recall = round(recall_score(outputMatrix, Test_Yd_calculated_Class[j], average="macro"), 3)
-            precision = round(precision_score(outputMatrix, Test_Yd_calculated_Class[j], average="macro"), 3)
-            fmeasure = round(f1_score(outputMatrix, Test_Yd_calculated_Class[j], average="macro"), 3)
+            recall = round(recall_score(outputMatrix, Test_Yd_calculated_Class[j], average=class_status), 3)
+            precision = round(precision_score(outputMatrix, Test_Yd_calculated_Class[j], average=class_status), 3)
+            fmeasure = round(f1_score(outputMatrix, Test_Yd_calculated_Class[j], average=class_status), 3)
             Test_Yd_calculated_Class_b = label_binarize(Test_Yd_calculated_Class[j], classes=labels)
             roc = round(roc_auc_score(outputMatrix_b, Test_Yd_calculated_Class_b, multi_class='ovr', average="macro"),3)
             accuracy_list.append(accuracy)
@@ -170,9 +177,11 @@ def performance_metrics(name, run, numberofclass, outputMatrix, Test_Yd_calculat
         cm=np.round(cm,2)
         print("Confusion Matrix Avg:")
         print(cm)
+        sns.set(font_scale=1.4)  # Adjust to fit
         sns.heatmap(cm,annot=True,fmt=".1f",linewidths=.5)
-        plt.xlabel('Predicted')
-        plt.ylabel('Actual')
+        label_font = {'size': '14'}  # Adjust to fit
+        plt.xlabel('Predicted', fontdict=label_font)
+        plt.ylabel('Actual', fontdict=label_font)
         plt.title('Confusion Matrix (Avg.) for {0}'''.format(name))
         tpr_calc = []
         fpr_calc = []

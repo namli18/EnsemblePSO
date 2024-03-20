@@ -134,7 +134,7 @@ def f_per_particle(b, alpha):
     P = round(accuracy_score(y_train_flatten, np.around(model.predict(X_subset))), 3)
 
     # j gives the objective function value
-    j = (alpha * (1.0 - P) + (1.0 - alpha) * X_subset.shape[1] / dimensions))
+    j = (alpha * (1.0 - P) + (1.0 - alpha) * (X_subset.shape[1] / dimensions))
     return j
 
 def f(x, alpha=0.95):
